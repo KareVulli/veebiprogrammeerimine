@@ -7,6 +7,7 @@
 		<div class="navbar-nav">
 			<a class="nav-item nav-link <?php if (isset($active) && $active === 'home') echo 'active'; ?> " href="index.php">Tund 1-2</a>
 			<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson3') echo 'active'; ?>" href="lesson3.php">Tund 3</a>
+			<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson3_2') echo 'active'; ?>" href="lesson3_2.php">Tund 3 (2)</a>
 		</div>
 	</div>
 </nav>

@@ -1,20 +1,22 @@
 <?php	
-	$active = 'lesson3';
-	$currentWeekDay = date("N");
-	$weekdayNames = [
-		'Esmaspäev',
-		'Teisipäev',
-		'Kolmapäev',
-		'Neljapäev',
-		'Reede',
-		'Laupäev',
-		'Pühapäev'
-	];
+	$active = 'lesson3_2';
 
-	$image = 'https://www.cs.tlu.ee/~rinde/media/fotod/TLU_600x400/tlu_' . rand(2, 43) . '.jpg';
+	$firstName = "Kodanik";
+	$lastName = "Tundmatu";
+	
+	if(isset($_POST['firstname']) && isset($_POST['lastname'])) {
+		$firstName = htmlspecialchars($_POST['firstname']);
+		$lastName = htmlspecialchars($_POST['lastname']);
+	}
+	if(isset($_POST['birthyear'])) {
+		$birthYear = $_POST['birthyear'];
+		$currentYear = date('Y');
+		while ($birthYear <= $currentYear) {
+			$years[] = $birthYear++;
+		}
+		
+	}
 
-	$imageDirectory = '../assets/images/';
-	$dirImages = array_slice(scandir($imageDirectory), 2);
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,39 +38,37 @@
 		<div class="row">
 			<div class="col">
 				<div class="center">
-					<h1>Tund 3</h1>
+					<h3>Tere, <?php echo $firstName . ' ' . $lastName ?>!</h3>
 				</div>
-				<p><?php echo 'Täna on ' . $weekdayNames[$currentWeekDay - 1] . ', '; ?><span id="datetime"><?php echo date('d.m.Y H:m:s'); ?></span></p>
-				
-
-				
+				<hr>
+				<form method="post">
+					<div class="form-group">
+						<label for="inputName">First name</label>
+						<input type="text" class="form-control" name="firstname" id="inputFirstName" placeholder="Sisesta oma eesnimi">
+					</div>
+					<div class="form-group">
+						<label for="inputName">Last name</label>
+						<input type="text" class="form-control" name="lastname" id="inputLastName" placeholder="Sisesta oma perekonnanimi">
+					</div>
+					<div class="form-group">
+						<label for="inputName">Sünniaasta</label>
+						<input type="number" class="form-control" name="birthyear" min="1918" max="2000" id="inputBirthyear" placeholder="Sisesta oma vanus" value="1998">
+					</div>
+					<button type="submit" class="btn btn-primary">Salvesta</button>
+				</form>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<p>Random image from web</p>
-				<img class="img-fluid img-thumbnail" src="<?php echo $image; ?>" alt="Tallinna Ülikooli Terra õppehoone">
-			</div>
-			<div class="col">
-				<p>Random image from folder</p>
-				<img class="img-fluid img-thumbnail" src="<?php echo $imageDirectory . $dirImages[rand(0, count($dirImages) - 1)]; ?>" alt="Photo from folder">
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<p>All images from the folder</p>
-			</div>
-		</div>
-		<div class="row">
 			<?php
-				for($i = 0; $i < count($dirImages); $i++) {
-					echo '<div class="col-4">
-						<img class="img-fluid img-thumbnail" src="' . $imageDirectory . $dirImages[$i] . '" alt="Pilt">
-					</div>';
+				if (isset($years)) {
+					echo '<div class="col"><div class="center"><h3>Oled elanud aastatel:</h3></div>';
+					echo '<ul class="list-group list-group-flush">';
+					foreach($years as $year) {
+						echo '<li class="list-group-item">' . $year . '</li>';
+					}
+					echo '</ul></div>';
 				}
 			?>
-			
 		</div>
+
 	</div>
 	<?php require_once('includes/footer.php'); ?>
 

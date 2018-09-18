@@ -70,7 +70,7 @@
 					}
 				
 				?>
-				<p>Praegu on <?php echo date('d.m.Y H:m:s') . '. Hetkel on ' . $timeDescription; ?></p>
+				<p>Praegu on <span id="datetime"></span></p>
 				<img class="img-fluid img-thumbnail" src="../../~rinde/veebiprogrammeerimine2018s/tlu_terra_600x400_1.jpg" alt="Tallinna Ülikooli Terra õppehoone">
 				
 				<p>Mul on ka sõber kes teeb oma <a href="../../~jaanlil/">veebi</a>.</p>
