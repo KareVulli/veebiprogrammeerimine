@@ -1,6 +1,7 @@
 <?php	
 	$active = 'lesson3';
 	$currentWeekDay = date("N");
+	$currentMonth = date('n');
 	$weekdayNames = [
 		'Esmaspäev',
 		'Teisipäev',
@@ -9,6 +10,21 @@
 		'Reede',
 		'Laupäev',
 		'Pühapäev'
+	];
+
+	$monthNames = [
+		'Jaanuar',
+		'Veebruar',
+		'Märts',
+		'Aprill',
+		'Mail',
+		'Juuni',
+		'Juuli',
+		'August',
+		'September',
+		'Oktoober',
+		'November',
+		'Detsember'
 	];
 
 	$image = 'https://www.cs.tlu.ee/~rinde/media/fotod/TLU_600x400/tlu_' . rand(2, 43) . '.jpg';
@@ -38,7 +54,7 @@
 				<div class="center">
 					<h1>Tund 3</h1>
 				</div>
-				<p><?php echo 'Täna on ' . $weekdayNames[$currentWeekDay - 1] . ', '; ?><span id="datetime"><?php echo date('d.m.Y H:m:s'); ?></span></p>
+				<p><?php echo 'Täna on ' . $weekdayNames[$currentWeekDay - 1] . '. Kuu on ' . $monthNames[$currentMonth - 1] . ', '; ?><span id="datetime"><?php echo date('d.m.Y H:m:s'); ?></span></p>
 				
 
 				
