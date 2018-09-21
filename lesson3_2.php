@@ -1,20 +1,62 @@
 <?php	
 	$active = 'lesson3_2';
 
+	// Default values
 	$firstName = "Kodanik";
 	$lastName = "Tundmatu";
+	$birthYear = 1998;
 	
 	if(isset($_POST['firstname']) && isset($_POST['lastname'])) {
+		// htmlspecialchars() protects us from XSS eg. when user writes "<script>alert('haxed')</script>"
+		// as their name, then that wont be run as javascript when we show it on the site.
 		$firstName = htmlspecialchars($_POST['firstname']);
 		$lastName = htmlspecialchars($_POST['lastname']);
 	}
+	// Too lazy to check if the value is valid... but you should do it.
 	if(isset($_POST['birthyear'])) {
-		$birthYear = $_POST['birthyear'];
+		$birthYear = intval($_POST['birthyear']); // cast to int to be safe when echoing it to the site.
+		$tempYear = $birthYear;
 		$currentYear = date('Y');
-		while ($birthYear <= $currentYear) {
-			$years[] = $birthYear++;
+		while ($tempYear <= $currentYear) {
+			$years[] = $tempYear++;
 		}
-		
+	}
+
+	// We make sure that the submitted birth month is actually valid
+	if(isset($_POST['birthmonth']) && $_POST['birthmonth'] >= 0 && $_POST['birthmonth'] < 12) {
+		$birthmonth = $_POST['birthmonth'];
+	}
+
+	$monthNames = [
+		'Jaanuar',
+		'Veebruar',
+		'Märts',
+		'Aprill',
+		'Mail',
+		'Juuni',
+		'Juuli',
+		'August',
+		'September',
+		'Oktoober',
+		'November',
+		'Detsember'
+	];
+
+	// ==== 2nd homework 3rd exercise ====
+	// Build month options
+	$currentMonth = date('n') - 1;
+	$monthOptions = ''; // Initialize with empty string.
+	for($i = 0; $i < count($monthNames); $i++) {
+		$selected = '';
+		if (isset($birthmonth)) {
+			if ($birthmonth == $i) {
+				$selected = 'selected';
+			}
+		} elseif ($currentMonth == $i) {
+			$selected = 'selected';
+		}
+		// "$a .= $b" is the same as "$a = $a . $b"
+		$monthOptions .= '<option value="' . $i . '" ' . $selected . ' >' . $monthNames[$i] . '</option>';
 	}
 	
 
@@ -45,34 +87,22 @@
 				<form method="post">
 					<div class="form-group">
 						<label for="inputName">First name</label>
-						<input type="text" class="form-control" name="firstname" id="inputFirstName" placeholder="Sisesta oma eesnimi">
+						<input type="text" class="form-control" name="firstname" id="inputFirstName" value="<?php echo $firstName; ?>" placeholder="Sisesta oma eesnimi">
 					</div>
 					<div class="form-group">
 						<label for="inputName">Last name</label>
-						<input type="text" class="form-control" name="lastname" id="inputLastName" placeholder="Sisesta oma perekonnanimi">
+						<input type="text" class="form-control" name="lastname" id="inputLastName" value="<?php echo $lastName; ?>" placeholder="Sisesta oma perekonnanimi">
 					</div>
 					<div class="form-group">
 						<label for="inputName">Sünniaasta</label>
-						<input type="number" class="form-control" name="birthyear" min="1918" max="2000" id="inputBirthyear" placeholder="Sisesta oma vanus" value="1998">
+						<input type="number" class="form-control" name="birthyear" min="1918" max="2000" id="inputBirthyear" placeholder="Sisesta oma vanus" value="<?php echo $birthYear; ?>">
 					</div>
 					<div class="form-group">
 						<label for="inputName">Sünnikuu</label>
-						<select name="birthMonth">
+						<select class="form-control" name="birthmonth">
 							<?php 
-								$currentMonth = date('n');
+								echo $monthOptions;
 							?>
-							<option value="1" <?php if ($currentMonth == 1) echo 'selected'; ?> >jaanuar</option>
-							<option value="2" <?php if ($currentMonth == 2) echo 'selected'; ?> >veebruar</option>
-							<option value="3" <?php if ($currentMonth == 3) echo 'selected'; ?> >märts</option>
-							<option value="4" <?php if ($currentMonth == 4) echo 'selected'; ?> >aprill</option>
-							<option value="5" <?php if ($currentMonth == 5) echo 'selected'; ?> >mai</option>
-							<option value="6" <?php if ($currentMonth == 6) echo 'selected'; ?> >juuni</option>
-							<option value="7" <?php if ($currentMonth == 7) echo 'selected'; ?> >juuli</option>
-							<option value="8" <?php if ($currentMonth == 8) echo 'selected'; ?> >august</option>
-							<option value="9" <?php if ($currentMonth == 9) echo 'selected'; ?> >september</option>
-							<option value="10" <?php if ($currentMonth == 10) echo 'selected'; ?> >oktoober</option>
-							<option value="11" <?php if ($currentMonth == 11) echo 'selected'; ?> >november</option>
-							<option value="12" <?php if ($currentMonth == 12) echo 'selected'; ?> >detsember</option>
 						</select>
 					</div>
 					<button type="submit" class="btn btn-primary">Salvesta</button>

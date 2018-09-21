@@ -1,5 +1,8 @@
 <?php
 	
+	// This file contains some random crap that is not related to school work or anything :)
+
+
 	$firstName = "Marvin";
 	$lastName = "Helstein";
 	
