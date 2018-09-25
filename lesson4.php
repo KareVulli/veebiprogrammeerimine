@@ -1,6 +1,8 @@
 <?php	
-	$active = 'lesson3_2';
-	$title = 'Tund 3';
+	require_once('includes/functions.php');
+
+	$active = 'lesson4';
+	$title = 'Tund 4 - funktsioonid';
 
 	// Default values
 	$firstName = "Kodanik";
@@ -8,14 +10,12 @@
 	$birthYear = 1998;
 	
 	if(isset($_POST['firstname']) && isset($_POST['lastname'])) {
-		// htmlspecialchars() protects us from XSS eg. when user writes "<script>alert('haxed')</script>"
-		// as their name, then that wont be run as javascript when we show it on the site.
-		$firstName = htmlspecialchars($_POST['firstname']);
-		$lastName = htmlspecialchars($_POST['lastname']);
+		$firstName = cleanInput($_POST['firstname']);
+		$lastName = cleanInput($_POST['lastname']);
 	}
 	// Too lazy to check if the value is valid... but you should do it.
 	if(isset($_POST['birthyear'])) {
-		$birthYear = intval($_POST['birthyear']); // cast to int to be safe when echoing it to the site.
+		$birthYear = intval(cleanInput($_POST['birthyear'])); // cast to int to be safe when echoing it to the site.
 		$tempYear = $birthYear;
 		$currentYear = date('Y');
 		while ($tempYear <= $currentYear) {
@@ -47,7 +47,7 @@
 	// Build month options
 	$currentMonth = date('n') - 1;
 	$monthOptions = ''; // Initialize with empty string.
-	for($i = 0; $i < count($monthNames); $i++) {
+	for ($i = 0; $i < count($monthNames); $i++) {
 		$selected = '';
 		if (isset($birthmonth)) {
 			if ($birthmonth == $i) {
@@ -59,7 +59,11 @@
 		// "$a .= $b" is the same as "$a = $a . $b"
 		$monthOptions .= '<option value="' . $i . '" ' . $selected . ' >' . $monthNames[$i] . '</option>';
 	}
-	
+    
+    function fullName($firstName, $lastName)
+    {
+        return $firstName . ' ' . $lastName;
+    }
 
 ?>
 <?php require_once('includes/header.php'); ?>
@@ -67,7 +71,7 @@
 		<div class="row">
 			<div class="col">
 				<div class="center">
-					<h3>Tere, <?php echo $firstName . ' ' . $lastName ?>!</h3>
+					<h3>Tere, <?php echo fullName($firstName, $lastName) ?>!</h3>
 				</div>
 				<hr>
 				<form method="post">
@@ -96,7 +100,7 @@
 			</div>
 			<?php
 				if (isset($years)) {
-					echo '<div class="col"><div class="center"><h3>Oled elanud aastatel:</h3></div>';
+					echo '<div class="col"><div class="center"><h3>' . fullName($firstName, $lastName) . ' on elanud aastatel:</h3></div>';
 					echo '<ul class="list-group list-group-flush">';
 					foreach($years as $year) {
 						echo '<li class="list-group-item">' . $year . '</li>';
