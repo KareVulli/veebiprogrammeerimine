@@ -23,7 +23,7 @@ function alert($message, $type = 'default')
 function getDb() {
     global $db;
     if ($db === null) {
-        $db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME, DB_USERNAME, DB_PASSWORD);
+        $db = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4', DB_USERNAME, DB_PASSWORD);
     }
     return $db;
 }
@@ -34,4 +34,10 @@ function saveMessage($message) {
     return $stmt->execute([
         ':message' => $message
     ]);
+}
+
+function getMessages() {
+    $db = getDb();
+    $stmt = $db->query('SELECT message, created FROM vpamsg ORDER BY created DESC');
+    return $stmt->fetchAll();
 }
