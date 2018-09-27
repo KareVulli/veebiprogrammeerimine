@@ -72,6 +72,25 @@
 					<button type="submit" class="btn btn-primary">Lisa kass</button>
 				</form>
 			</div>
+            <div class="col">
+                <div class="center">
+                    <h3>Salvestatud sõnumid</h3>
+				</div>
+				<hr>
+				<div class="list-group">
+                    <?php 
+                        $cats = getCats();
+                        foreach ($cats as $cat) {
+                            echo '<div class="list-group-item flex-column align-items-start">' .
+                                    '<div class="d-flex w-100 justify-content-between">' .
+                                        '<span>Nimi: ' . cleanInput($cat['name']) . ' -  Värv:  ' . cleanInput($cat['color']) . '</span>' .
+                                        '<span class="text-nowrap">Saba pikkus: ' . cleanInput($cat['tail_length']) . '</span>' .
+                                    '</div>' .
+                                '</div>';
+                        }
+                    ?>
+                </div>
+			</div>
 		</div>
 
 	</div>
