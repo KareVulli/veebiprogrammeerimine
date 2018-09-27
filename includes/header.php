@@ -26,6 +26,7 @@
 				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4') echo 'active'; ?>" href="lesson4.php">Tund 4 - funktsioonid</a>
 				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4_add_message') echo 'active'; ?>" href="lesson4_add_message.php">Tund 4 - lisa sõnum</a>
 				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4_read_messages') echo 'active'; ?>" href="lesson4_read_messages.php">Tund 4 - sõnumid</a>
+				<a class="nav-item nav-link <?php if (isset($active) && $active === 'homework3_cats') echo 'active'; ?>" href="homework3_cats.php">Kodutöö 3 - kassid</a>
 			</div>
 		</div>
 	</nav>

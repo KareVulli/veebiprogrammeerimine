@@ -41,3 +41,19 @@ function getMessages() {
     $stmt = $db->query('SELECT message, created FROM vpamsg ORDER BY created DESC');
     return $stmt->fetchAll();
 }
+
+function saveCat($name, $color, $tail) {
+    $db = getDb();
+    $stmt = $db->prepare('INSERT INTO cats (name, color, tail_length) VALUES (:name, :color, :tail_length)');
+    return $stmt->execute([
+        ':name' => $name,
+        ':color' => $color,
+        ':tail_length' => $tail
+    ]);
+}
+
+function getCats() {
+    $db = getDb();
+    $stmt = $db->query('SELECT name, color, tail_length FROM cats ORDER BY created DESC');
+    return $stmt->fetchAll();
+}
