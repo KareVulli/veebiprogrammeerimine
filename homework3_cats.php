@@ -74,7 +74,7 @@
 			</div>
             <div class="col">
                 <div class="center">
-                    <h3>Salvestatud sõnumid</h3>
+                    <h3>Lisatud kassid</h3>
 				</div>
 				<hr>
 				<div class="list-group">
