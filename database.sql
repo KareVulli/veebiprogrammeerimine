@@ -10,3 +10,12 @@ CREATE TABLE IF NOT EXISTS `vpamsg` (
   `accepted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `cats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `color` varchar(32) NOT NULL,
+  `tail_length` int(11) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+);
