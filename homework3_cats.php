@@ -83,8 +83,12 @@
                         foreach ($cats as $cat) {
                             echo '<div class="list-group-item flex-column align-items-start">' .
                                     '<div class="d-flex w-100 justify-content-between">' .
-                                        '<span>Nimi: ' . cleanInput($cat['name']) . ' -  Värv:  ' . cleanInput($cat['color']) . '</span>' .
-                                        '<span class="text-nowrap">Saba pikkus: ' . cleanInput($cat['tail_length']) . '</span>' .
+                                        '<span>Nimi: <strong>' . cleanInput($cat['name']) . '</strong></span>' .
+                                        '<p class="text-right mb-1"><small class="text-muted" >Salvestatud aeg: ' . cleanInput($cat['created']) . '</small></p>' .
+                                    '</div>' .
+                                    '<div class="d-flex w-100 justify-content-between">' .
+                                        '<span>Värv:  ' . cleanInput($cat['color']) . '</span>' .
+                                        '<span class="text-nowrap">Saba pikkus: ' . cleanInput($cat['tail_length']) . ' cm</span>' .
                                     '</div>' .
                                 '</div>';
                         }

@@ -13,21 +13,32 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		<a class="navbar-brand" href="#">*CareFully*</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="main-navbar">
-			<div class="navbar-nav">
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'home') echo 'active'; ?> " href="index.php">Tund 1-2</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson3') echo 'active'; ?>" href="lesson3.php">Tund 3 - pildid</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson3_2') echo 'active'; ?>" href="lesson3_2.php">Tund 3 - form</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4') echo 'active'; ?>" href="lesson4.php">Tund 4 - funktsioonid</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4_add_message') echo 'active'; ?>" href="lesson4_add_message.php">Tund 4 - lisa sõnum</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'lesson4_read_messages') echo 'active'; ?>" href="lesson4_read_messages.php">Tund 4 - sõnumid</a>
-				<a class="nav-item nav-link <?php if (isset($active) && $active === 'homework3_cats') echo 'active'; ?>" href="homework3_cats.php">Kodutöö 3 - kassid</a>
+	<div class="wrapper">
+		<nav id="sidebar">
+			<div class="sidebar-header">
+				<h4 class="text-center">*CareFully* veebiarendus</h4>
 			</div>
-		</div>
-	</nav>
-	<div class="top-bg"></div>
+			<ul class="list-unstyled components">
+				<li <?php if (isset($active) && $active === 'home') echo 'class="active"'; ?>><a href="index.php">Tund 1-2</a></li>
+				<li <?php if (isset($active) && $active === 'lesson3') echo 'class="active"'; ?>><a href="lesson3.php">Tund 3 - pildid</a></li>
+				<li <?php if (isset($active) && $active === 'lesson3_2') echo 'class="active"'; ?>><a href="lesson3_2.php">Tund 3 - form</a></li>
+				<li <?php if (isset($active) && $active === 'lesson4') echo 'class="active"'; ?>><a href="lesson4.php">Tund 4 - funktsioonid</a></li>
+				<li <?php if (isset($active) && $active === 'lesson4_add_message') echo 'class="active"'; ?>><a href="lesson4_add_message.php">Tund 4 - lisa sõnum</a></li>
+				<li <?php if (isset($active) && $active === 'lesson4_read_messages') echo 'class="active"'; ?>><a href="lesson4_read_messages.php">Tund 4 - sõnumid</a></li>
+				<li <?php if (isset($active) && $active === 'homework3_cats') echo 'class="active"'; ?>><a href="homework3_cats.php">Kodutöö 3 - kassid</a></li>
+				<li <?php if (isset($active) && $active === 'lesson5') echo 'class="active"'; ?>><a href="lesson5.php">Tund 5 - kasutaja</a></li>
+			</ul>
+		</nav>
+
+		<div class="content">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container-fluid">
+					<button type="button" id="sidebarCollapse" class="btn">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+			</nav>
+
+		
+		<!-- <div class="top-bg"></div> -->
+		
