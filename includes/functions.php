@@ -1,5 +1,9 @@
 <?php
 
+const USER_NOT_EXIST = 0;
+const USER_EMAIL_EXISTS = 1;
+const USER_NAME_EXISTS = 2;
+
 require_once('config.php');
 
 // include database credentials
@@ -58,6 +62,27 @@ function getCats() {
     $db = getDb();
     $stmt = $db->query('SELECT name, color, tail_length, created FROM cats ORDER BY created DESC');
     return $stmt->fetchAll();
+}
+
+function doesUserExist($username, $email) {
+    $db = getDb();
+    $stmt = $db->prepare(
+        'SELECT id, username, email FROM vpusers ' .
+        'WHERE username = :username OR email = :email LIMIT 1'
+    );
+    $stmt->execute([
+        ':username' => $username,
+        ':email' => $email
+    ]);
+    if ($row = $stmt->fetch()) {
+        if ($row['username'] === $username) {
+            return USER_NAME_EXISTS;
+        } else {
+            return USER_EMAIL_EXISTS;
+        }
+    }
+    return USER_NOT_EXIST;
+
 }
 
 function saveUser($firstname, $lastname, $username, $email, $password, $birthDate, $gender) {

@@ -113,7 +113,14 @@
 
         // If no errors were found, save the user.
         if (!count($errors)) {
-            if (saveUser($firstname, $lastname, $username, $email, $password, $birthDate, $gender)) {
+            // Check if there is no exiting user with given username or password
+            $exists = doesUserExist($username, $email);
+            
+            if ($exists == USER_EMAIL_EXISTS) {
+                $errors['email'] = "Sisestatud email on juba kasutusel";
+            } else if ($exists == USER_NAME_EXISTS) {
+                $errors['username'] = "Sisestatud kasutajanimi on juba kasutusel";
+            } else if (saveUser($firstname, $lastname, $username, $email, $password, $birthDate, $gender)) {
                 $success = true;
                 // Reset fields
                 $firstname = $lastname = $username = $email = $password = '';
