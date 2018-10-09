@@ -1,3 +1,18 @@
+<?php
+	
+	require_once('includes/functions.php');
+	
+	if (isset($_SESSION['loginError'])) {
+		$status = 'data-show="true"';
+		$loginError = alert(cleanInput($_SESSION['loginError']), 'danger');
+		unset($_SESSION['loginError']);
+	} else {
+		$status = '';
+		$loginError = '';
+	}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -27,17 +42,79 @@
 				<li <?php if (isset($active) && $active === 'lesson4_read_messages') echo 'class="active"'; ?>><a href="lesson4_read_messages.php">Tund 4 - sõnumid</a></li>
 				<li <?php if (isset($active) && $active === 'homework3_cats') echo 'class="active"'; ?>><a href="homework3_cats.php">Kodutöö 3 - kassid</a></li>
 				<li <?php if (isset($active) && $active === 'lesson5') echo 'class="active"'; ?>><a href="lesson5.php">Tund 5 - kasutaja</a></li>
+				<li <?php if (isset($active) && $active === 'lesson6') echo 'class="active"'; ?>><a href="lesson6.php">Tund 6 - Sisselogimine</a></li>
 			</ul>
 		</nav>
 
 		<div class="content">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<div class="container-fluid">
+				<ul class="navbar-nav mr-auto">
 					<button type="button" id="sidebarCollapse" class="btn">
 						<span class="navbar-toggler-icon"></span>
 					</button>
-				</div>
+					<?php
+						if($loggedIn) {
+							echo 
+							'<li class="nav-item">
+								<a class="nav-link" href="lesson6_validate.php">Valideeri sõnumeid</a>
+							</li>';
+						}
+
+					?>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<?php
+						if($loggedIn) {
+							echo 
+							'<span class="navbar-text"><strong>Tere, ' . $user['firstname'] . ' ' . $user['lastname'] . '</strong></span>
+							<li class="nav-item">
+								<a class="nav-link" href="logout.php">Logi välja</a>
+							</li>';
+						} else {
+							echo 
+							'<li class="nav-item">
+								<a class="nav-link" href="#loginModal" data-toggle="modal">Logi sisse</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="lesson5.php">Registeeru</a>
+							</li>';
+						}
+
+					?>
+				</ul>
 			</nav>
+
+			<div class="modal fade" id="loginModal" <?php echo $status; ?> tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="loginModalLabel">Sisselogimine</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form method="POST" action="login.php">
+							<div class="modal-body">
+								<?php 
+									echo $loginError;
+								?>
+								<div class="form-group">
+									<label for="loginEmail">Email või kasutajanimi</label>
+									<input type="text" class="form-control" id="loginEmail" name="email">
+								</div>
+								<div class="form-group">
+									<label for="loginPassword">Parool</label>
+									<input type="password" class="form-control" id="loginPassword" name="password">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Sulge</button>
+								<button type="submit" class="btn btn-primary">Logi sisse</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
 
 		
 		<!-- <div class="top-bg"></div> -->

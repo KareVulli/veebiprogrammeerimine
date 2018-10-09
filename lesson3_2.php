@@ -1,4 +1,6 @@
 <?php	
+    require_once('includes/functions.php');
+	
 	$active = 'lesson3_2';
 	$title = 'Tund 3';
 

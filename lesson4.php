@@ -1,6 +1,6 @@
-<?php	
+<?php
 	require_once('includes/functions.php');
-
+	
 	$active = 'lesson4';
 	$title = 'Tund 4 - funktsioonid';
 

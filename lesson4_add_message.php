@@ -1,6 +1,6 @@
-<?php	
+<?php
     require_once('includes/functions.php');
-
+	
 	$active = 'lesson4_add_message';
     $title = 'Sõnumi lisamine';
     $success = false;

@@ -1,6 +1,6 @@
-<?php	
+<?php
     require_once('includes/functions.php');
-
+	
 	$active = 'lesson4_read_messages';
     $title = 'Salvestatud sõnumid';
 
@@ -15,6 +15,7 @@
 				</div>
 				<hr>
 				<div class="list-group">
+                    <form>
                     <?php 
                         foreach ($messages as $message) {
                             echo '<div class="list-group-item flex-column align-items-start">' .
@@ -25,6 +26,7 @@
                                 '</div>';
                         }
                     ?>
+                    </form>
                 </div>
 			</div>
 		</div>
