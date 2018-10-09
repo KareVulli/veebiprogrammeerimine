@@ -152,6 +152,25 @@ function getUser($id)
     return $row = $stmt->fetch();
 }
 
+function getUsers()
+{
+    $db = getDb();
+    if (isset($_SESSION['user'])) {
+        $user = getUser($_SESSION['user']);
+        if ($user === null) {
+            $stmt = $db->query('SELECT * FROM vpusers');
+        } else {
+            $stmt = $db->prepare('SELECT * FROM vpusers WHERE id <> :id');
+            $stmt->execute([
+                ':id' => $user['id']
+            ]);
+        }
+    } else {
+        $stmt = $db->query('SELECT * FROM vpusers'); // copy pastaaaa
+    }
+    return $stmt->fetchAll();
+}
+
 function saveUser($firstname, $lastname, $username, $email, $password, $birthDate, $gender)
 {
 // Don't try to do anything fancy with trying to generate your own salt. PHP will generate one itself.
