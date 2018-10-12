@@ -70,7 +70,12 @@ function setMessageValidated($id)
 {
     $db = getDb();
     $user = getUser($_SESSION['user']);
+    // We're setting the message as accepted and we also add information about who and when accepted the message
+    // Where selecting what message to udpdate by filtering the messages by id. ID is unique to every message so there will be
+    // Either 0 or 1 results. However even if there is 0 results, there is no error and that's fine. We don't need to care about that.
+    // We do care about the validity of the user_id (specially if you have foreign key constrains properly set up). 
     $stmt = $db->prepare('UPDATE vpamsg SET accepted = 1, accepted_by = :accepted_by, accepted_at = NOW() WHERE id = :id');
+    // UPDATE table set column = new_value, column2 = new_value2, ... WHERE [same as select] id = 2
     $stmt->execute([
         ':id' => $id,
         ':accepted_by' => $user['id']
@@ -157,7 +162,7 @@ function getUsers()
     $db = getDb();
     if (isset($_SESSION['user'])) {
         $user = getUser($_SESSION['user']);
-        if ($user === null) {
+        if ($user === null) { // if user is not logged in, we 
             $stmt = $db->query('SELECT * FROM vpusers');
         } else {
             $stmt = $db->prepare('SELECT * FROM vpusers WHERE id <> :id');
@@ -193,5 +198,13 @@ function saveUser($firstname, $lastname, $username, $email, $password, $birthDat
         ':birthdate' => $birthDate,
         ':gender' => $gender
     ]);
+}
+// Redirects user to the previous page
+function goBack() {
+    if(isset($_SERVER['HTTP_REFERER'])) {
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    } else {
+        header('Location: index.php');
+    }
 }
 

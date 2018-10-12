@@ -2,13 +2,15 @@
 
 require_once('includes/functions.php');
 
+if ($loggedIn) {
+    // Already logged in. Nothing to do here.
+    goBack();
+    die();
+}
+
 if (!isset($_POST['email']) || !isset($_POST['password'])) {
     $_SESSION['loginError'] = "Palun täida kõik väljad";
-    if(isset($_SERVER['HTTP_REFERER'])) {
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-    } else {
-        header('Location: index.php');
-    }
+    goBack();
     die();
 }
 
@@ -20,11 +22,7 @@ if ($user === null) {
     $_SESSION['user'] = $user;
 }
 
-if(isset($_SERVER['HTTP_REFERER'])) {
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
-} else {
-    header('Location: index.php');
-}
+goBack();
 die();
 
 ?>
