@@ -43,6 +43,7 @@
 				<li <?php if (isset($active) && $active === 'homework3_cats') echo 'class="active"'; ?>><a href="homework3_cats.php">Kodutöö 3 - kassid</a></li>
 				<li <?php if (isset($active) && $active === 'lesson5') echo 'class="active"'; ?>><a href="lesson5.php">Tund 5 - kasutaja</a></li>
 				<li <?php if (isset($active) && $active === 'lesson6') echo 'class="active"'; ?>><a href="lesson6.php">Tund 6 - Sisselogimine</a></li>
+				<li <?php if (isset($active) && $active === 'homework5_users') echo 'class="active"'; ?>><a href="homework5_users.php">Kodutöö 5 - kasutajad</a></li>
 			</ul>
 		</nav>
 
