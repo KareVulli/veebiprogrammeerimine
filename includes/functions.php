@@ -46,42 +46,6 @@ function getDb()
     return $db;
 }
 
-function saveMessage($message)
-{
-    $db = getDb();
-    $stmt = $db->prepare('INSERT INTO vpamsg (message) VALUES (:message)');
-    return $stmt->execute([
-        ':message' => $message
-    ]);
-}
-
-function getMessages($notValidated = false)
-{
-    $db = getDb();
-    if ($notValidated) {
-        $stmt = $db->query('SELECT id, message, created, accepted FROM vpamsg WHERE accepted <> 1 ORDER BY created DESC');
-    } else {
-        $stmt = $db->query('SELECT id, message, created, accepted FROM vpamsg WHERE accepted = 1 ORDER BY created DESC');
-    }
-    return $stmt->fetchAll();
-}
-
-function setMessageValidated($id)
-{
-    $db = getDb();
-    $user = getUser($_SESSION['user']);
-    // We're setting the message as accepted and we also add information about who and when accepted the message
-    // Where selecting what message to udpdate by filtering the messages by id. ID is unique to every message so there will be
-    // Either 0 or 1 results. However even if there is 0 results, there is no error and that's fine. We don't need to care about that.
-    // We do care about the validity of the user_id (specially if you have foreign key constrains properly set up). 
-    $stmt = $db->prepare('UPDATE vpamsg SET accepted = 1, accepted_by = :accepted_by, accepted_at = NOW() WHERE id = :id');
-    // UPDATE table set column = new_value, column2 = new_value2, ... WHERE [same as select] id = 2
-    $stmt->execute([
-        ':id' => $id,
-        ':accepted_by' => $user['id']
-    ]);
-}
-
 function saveCat($name, $color, $tail)
 {
     $db = getDb();
@@ -154,7 +118,15 @@ function getUser($id)
     $stmt->execute([
         ':id' => $id
     ]);
-    return $row = $stmt->fetch();
+    $row = $stmt->fetch();
+    // Add default colors
+    if (!$row['foreground']) {
+        $row['foreground'] = '#000000';
+    }
+    if (!$row['background']) {
+        $row['background'] = '#FFFFFF';
+    }
+    return $row;
 }
 
 function getUsers()
@@ -208,3 +180,21 @@ function goBack() {
     }
 }
 
+
+// UTIL FUNCIONS
+
+function darkenColor($rgb, $darker=2) {
+
+    $hash = (strpos($rgb, '#') !== false) ? '#' : '';
+    $rgb = (strlen($rgb) == 7) ? str_replace('#', '', $rgb) : ((strlen($rgb) == 6) ? $rgb : false);
+    if(strlen($rgb) != 6) return $hash.'000000';
+    $darker = ($darker > 1) ? $darker : 1;
+
+    list($R16,$G16,$B16) = str_split($rgb,2);
+
+    $R = sprintf("%02X", floor(hexdec($R16)/$darker));
+    $G = sprintf("%02X", floor(hexdec($G16)/$darker));
+    $B = sprintf("%02X", floor(hexdec($B16)/$darker));
+
+    return $hash.$R.$G.$B;
+}
