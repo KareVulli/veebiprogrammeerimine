@@ -154,7 +154,15 @@ function getUser($id)
     $stmt->execute([
         ':id' => $id
     ]);
-    return $row = $stmt->fetch();
+    $row = $stmt->fetch();
+    // Add default colors
+    if (!$row['foreground']) {
+        $row['foreground'] = '#000000';
+    }
+    if (!$row['background']) {
+        $row['background'] = '#FFFFFF';
+    }
+    return $row;
 }
 
 function getUsers()
@@ -208,3 +216,21 @@ function goBack() {
     }
 }
 
+
+// UTIL FUNCIONS
+
+function darkenColor($rgb, $darker=2) {
+
+    $hash = (strpos($rgb, '#') !== false) ? '#' : '';
+    $rgb = (strlen($rgb) == 7) ? str_replace('#', '', $rgb) : ((strlen($rgb) == 6) ? $rgb : false);
+    if(strlen($rgb) != 6) return $hash.'000000';
+    $darker = ($darker > 1) ? $darker : 1;
+
+    list($R16,$G16,$B16) = str_split($rgb,2);
+
+    $R = sprintf("%02X", floor(hexdec($R16)/$darker));
+    $G = sprintf("%02X", floor(hexdec($G16)/$darker));
+    $B = sprintf("%02X", floor(hexdec($B16)/$darker));
+
+    return $hash.$R.$G.$B;
+}

@@ -25,11 +25,34 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="style.css">
+	<?php
+		if ($loggedIn) {
+			echo '<style>' .
+				'.content { ' .
+					'background-color: ' . $user['background'] . '; ' .
+					'color: ' . $user['foreground'] . '; ' .
+				'}' .
+				'.user-dark { ' .
+					'background-color: ' . darkenColor($user['background'], 1.2) . '!important; ' .
+					'color: ' . $user['foreground'] . '!important; ' .
+				'}' .
+				'.user { ' .
+					'background-color: ' . $user['background'] . '!important; ' .
+					'color: ' . $user['foreground'] . '!important; ' .
+				'}' .
+				'#sidebar ul li.active > a, a[aria-expanded="true"] { ' .
+					'background-color: ' . $user['background'] . '!important; ' .
+					'color: ' . $user['foreground'] . '!important; ' .
+				'}' .
+			'</style>';
+		}
+
+	?>
 </head>
 
 <body>
 	<div class="wrapper">
-		<nav id="sidebar">
+		<nav id="sidebar" class="user-dark">
 			<div class="sidebar-header">
 				<h4 class="text-center">*CareFully* veebiarendus</h4>
 			</div>
@@ -48,7 +71,7 @@
 		</nav>
 
 		<div class="content">
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light user-dark">
 				<ul class="navbar-nav mr-auto">
 					<button type="button" id="sidebarCollapse" class="btn">
 						<span class="navbar-toggler-icon"></span>
@@ -56,8 +79,11 @@
 					<?php
 						if($loggedIn) {
 							echo 
-							'<li class="nav-item">
+							'<li class="nav-item' . (isset($active) && $active === 'lesson6_validate' ? ' active' : '') . '">
 								<a class="nav-link" href="lesson6_validate.php">Valideeri sõnumeid</a>
+							</li>
+							<li class="nav-item' . (isset($active) && $active === 'lesson7_validated' ? ' active' : '') . '">
+								<a class="nav-link" href="lesson7_validated.php">Valideeritud sõnumid</a>
 							</li>';
 						}
 
@@ -68,6 +94,9 @@
 						if($loggedIn) {
 							echo 
 							'<span class="navbar-text"><strong>Tere, ' . $user['firstname'] . ' ' . $user['lastname'] . '</strong></span>
+							<li class="nav-item' . (isset($active) && $active === 'userprofile' ? ' active' : '') . '">
+								<a class="nav-link" href="userprofile.php">Profiil</a>
+							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="logout.php">Logi välja</a>
 							</li>';

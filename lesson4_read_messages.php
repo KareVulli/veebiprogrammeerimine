@@ -1,5 +1,6 @@
 <?php
     require_once('includes/functions.php');
+    require_once('includes/functions/messages.php');
 	
 	$active = 'lesson4_read_messages';
     $title = 'Salvestatud sõnumid';
