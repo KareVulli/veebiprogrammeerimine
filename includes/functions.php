@@ -197,3 +197,40 @@ function darkenColor($rgb, $darker=2) {
 
     return $hash.$R.$G.$B;
 }
+
+function resizeImage($imagePath, $ext, $newWidth, $newHeight, $crop = false) {
+    switch($ext){
+        case "png":
+            $src = imagecreatefrompng($imagePath);
+        break;
+        case "jpeg":
+        case "jpg":
+            $src = imagecreatefromjpeg($imagePath);
+        break;
+        case "gif":
+            $src = imagecreatefromgif($imagePath);
+        break;
+        default:
+            $src = imagecreatefromjpeg($imagePath);
+        break;
+    }
+
+    if ($src) {
+        $width = imagesx($src);
+        $height = imagesy($src);
+
+        if ($width > $height) {
+            $sizePercent = $width / $newWidth;
+        } else {
+            $sizePercent = $height / $newHeight;
+        }
+        $imageNewWidth = $width / $sizePercent;
+        $imageNewHeight = $height / $sizePercent;
+
+        $dest = imagecreatetruecolor($imageNewWidth, $imageNewHeight);
+        imagecopyresampled($dest, $src, 0, 0, 0, 0, $imageNewWidth, $imageNewHeight, $width, $height);
+        return $dest;
+    }
+
+    return false;
+}

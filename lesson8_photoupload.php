@@ -1,4 +1,7 @@
 <?php	
+const WIDTH = 600;
+const HEIGHT = 400;
+
 require_once('includes/functions.php');
 
 if (!$loggedIn) {
@@ -13,10 +16,10 @@ $uploadError = null;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if (isset($_FILES["photo"])) {
+	if (isset($_FILES["photo"]) && !empty($_FILES["photo"]["name"])) {
 		$target_dir = "uploads/";
 		$imageFileType = strtolower(pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION));
-		$target_file = $target_dir . $user['id'] . '-' . microtime(true) * 10000 . '.' . $imageFileType;
+		$target_file = $target_dir . $user['id'] . '-' . microtime(true) * 10000 . '.png';
 		$check = getimagesize($_FILES["photo"]["tmp_name"]);
 
 		if($check !== false) {
@@ -36,8 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
 
 		if ($uploadOk == 1) {
-			if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+			$image = resizeImage($_FILES["photo"]["tmp_name"], $imageFileType, WIDTH, HEIGHT);
+			if ($image && imagepng($image, $target_file)) {
 				$uploadError = 'The file '. basename($_FILES["photo"]["name"]) . ' has been uploaded.';
+				imagedestroy($image);
 			} else {
 				$uploadError = 'Sorry, there was an error uploading your file.';
 				$uploadOk = 0;
