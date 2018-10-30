@@ -67,6 +67,7 @@
 				<li <?php if (isset($active) && $active === 'lesson5') echo 'class="active"'; ?>><a href="lesson5.php">Tund 5 - kasutaja</a></li>
 				<li <?php if (isset($active) && $active === 'lesson6') echo 'class="active"'; ?>><a href="lesson6.php">Tund 6 - Sisselogimine</a></li>
 				<li <?php if (isset($active) && $active === 'homework5_users') echo 'class="active"'; ?>><a href="homework5_users.php">Kodutöö 5 - kasutajad</a></li>
+				<li <?php if (isset($active) && $active === 'lesson8') echo 'class="active"'; ?>><a href="lesson8.php">Tund 8</a></li>
 			</ul>
 		</nav>
 

@@ -45,43 +45,6 @@ function getDb()
     }
     return $db;
 }
-
-function saveMessage($message)
-{
-    $db = getDb();
-    $stmt = $db->prepare('INSERT INTO vpamsg (message) VALUES (:message)');
-    return $stmt->execute([
-        ':message' => $message
-    ]);
-}
-
-function getMessages($notValidated = false)
-{
-    $db = getDb();
-    if ($notValidated) {
-        $stmt = $db->query('SELECT id, message, created, accepted FROM vpamsg WHERE accepted <> 1 ORDER BY created DESC');
-    } else {
-        $stmt = $db->query('SELECT id, message, created, accepted FROM vpamsg WHERE accepted = 1 ORDER BY created DESC');
-    }
-    return $stmt->fetchAll();
-}
-
-function setMessageValidated($id)
-{
-    $db = getDb();
-    $user = getUser($_SESSION['user']);
-    // We're setting the message as accepted and we also add information about who and when accepted the message
-    // Where selecting what message to update by filtering the messages by id. ID is unique to every message so there will be
-    // Either 0 or 1 results. However even if there is 0 results, there is no error and that's fine. We don't need to care about that.
-    // We do care about the validity of the user_id (specially if you have foreign key constrains properly set up). 
-    $stmt = $db->prepare('UPDATE vpamsg SET accepted = 1, accepted_by = :accepted_by, accepted_at = NOW() WHERE id = :id');
-    // UPDATE table set column = new_value, column2 = new_value2, ... WHERE [same as select] id = 2
-    $stmt->execute([
-        ':id' => $id,
-        ':accepted_by' => $user['id']
-    ]);
-}
-
 function saveCat($name, $color, $tail)
 {
     $db = getDb();
