@@ -67,16 +67,19 @@
 				<li <?php if (isset($active) && $active === 'lesson5') echo 'class="active"'; ?>><a href="lesson5.php">Tund 5 - kasutaja</a></li>
 				<li <?php if (isset($active) && $active === 'lesson6') echo 'class="active"'; ?>><a href="lesson6.php">Tund 6 - Sisselogimine</a></li>
 				<li <?php if (isset($active) && $active === 'homework5_users') echo 'class="active"'; ?>><a href="homework5_users.php">Kodutöö 5 - kasutajad</a></li>
-				<li <?php if (isset($active) && $active === 'lesson8') echo 'class="active"'; ?>><a href="lesson8.php">Tund 8</a></li>
+				<li <?php if (isset($active) && $active === 'lesson8') echo 'class="active"'; ?>><a href="lesson8_photoupload.php">Tund 8 - Fotod</a></li>
 			</ul>
 		</nav>
 
 		<div class="content">
 			<nav class="navbar navbar-expand-lg navbar-light bg-light user-dark">
-				<ul class="navbar-nav mr-auto">
+				<a class="navbar-brand" href="index.php">
+					<img src="assets/images/vp_picfiles/vp_logo_color_w100_overlay.png" height="30" alt="">
+				</a>
+				<ul class="navbar-nav mr-auto"><!-- 
 					<button type="button" id="sidebarCollapse" class="btn">
 						<span class="navbar-toggler-icon"></span>
-					</button>
+					</button> -->
 					<?php
 						if($loggedIn) {
 							echo 
