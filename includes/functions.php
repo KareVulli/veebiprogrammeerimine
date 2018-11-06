@@ -109,10 +109,17 @@ function login($email, $password)
 
 function getUser($id)
 {
+    global $config;
+
     $db = getDb();
     $stmt = $db->prepare(
-        'SELECT * FROM vpusers ' .
-            'WHERE id = :id'
+        'SELECT u.*, a.file AS profile_image FROM vpusers u
+        LEFT JOIN vpavatars a ON a.user_id = u.id 
+        WHERE u.id = :id AND a.id = (
+            SELECT MAX(id)
+            FROM vpavatars 
+            WHERE user_id = :id
+        )'
     );
     $stmt->execute([
         ':id' => $id
@@ -124,6 +131,11 @@ function getUser($id)
     }
     if (!$row['background']) {
         $row['background'] = '#FFFFFF';
+    }
+    if (!$row['profile_image']) {
+        $row['profile_image'] = $config['default_avatar'];
+    } else {
+        $row['profile_image'] = 'uploads/avatars/' . $row['profile_image'];
     }
     return $row;
 }

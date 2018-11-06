@@ -13,7 +13,7 @@ function savePhoto($userid, $filename, $title, $isPrivate)
     ]);
 }
 
-function resizeImage($imagePath, $ext, $newWidth, $newHeight, $crop = false) {
+function resizeImage($imagePath, $ext, $newWidth, $newHeight, $addText = true, $addWatermark = true, $crop = false) {
     global $user;
 
     switch($ext){
@@ -46,8 +46,10 @@ function resizeImage($imagePath, $ext, $newWidth, $newHeight, $crop = false) {
 
         $dest = imagecreatetruecolor($imageNewWidth, $imageNewHeight);
         imagecopyresampled($dest, $src, 0, 0, 0, 0, $imageNewWidth, $imageNewHeight, $width, $height);
-        addWatermark($dest, 10);
-        if ($user != null) {
+        if ($addWatermark) {
+            addWatermark($dest, 10);
+        }
+        if ($addText && $user != null) {
             addTextToImage($dest, 'Hello ' . $user['firstname'] . ' ' . $user['lastname']);
         }
         return $dest;

@@ -1,6 +1,7 @@
 <?php
     require_once('includes/functions.php');
     require_once('includes/functions/users.php');
+    require_once('includes/functions/photos.php');
 	
 	$active = 'userprofile';
     $title = 'Sinu profiil';
@@ -35,6 +36,43 @@
             $background = $_POST['background'];
         }
 
+        // Check if avatar is uploaded and save it.
+        if (isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["name"])) {
+            $targetDir = "uploads/avatars/";
+            $imageFileType = strtolower(pathinfo($_FILES["avatar"]["name"], PATHINFO_EXTENSION));
+            $fileName = 'vp_avatar_' . $user['id'] . '-' . microtime(true) * 10000 . '.png';
+            $target_file = $targetDir . $fileName;
+            $check = getimagesize($_FILES["avatar"]["tmp_name"]);
+    
+            if($check !== false) {
+                $uploadOk = 1;
+            } else {
+                $uploadOk = 0;
+            }
+    
+            if ($_FILES["avatar"]["size"] > 2500000) {
+                $errors['avatar'] = "Sorry, your avatar is too large.";
+                $uploadOk = 0;
+            }
+    
+            if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+                $errors['avatar'] = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+                $uploadOk = 0;
+            }
+    
+            if ($uploadOk == 1) {
+                $image = resizeImage($_FILES["avatar"]["tmp_name"], $imageFileType, 300, 300, false, false);
+                if ($image && imagepng($image, $target_file)) {
+                    imagedestroy($image);
+                    if (!setAvatar($user['id'], $fileName)) {
+                        $errors['avatar'] = 'Sorry, there was an error saving your avatar.';
+                    }
+                } else {
+                    $errors['avatar'] = 'Sorry, there was an error uploading your avatar.';
+                }
+            }
+        }
+
         if (!count($errors)) {
             if (updateProfile($user['id'], $bio, $foreground, $background)) {
                 $success = true;
@@ -65,7 +103,16 @@
                         echo alert('Profiil salvestatud edukalt', 'success');
                     }
                 ?>
-				<form method="post">
+				<form method="post" enctype="multipart/form-data">
+                    <img src="<?php echo $user['profile_image']; ?>" alt="Profile picture" class="img-thumbnail">
+					<div class="form-group">
+						<label for="avatar">Muuda avatari</label>
+						<input type="file" name="avatar" class="form-control-file <?php if (isset($errors['avatar'])) echo "is-invalid"; ?>" id="avatar">
+                        <?php if(isset($errors['avatar'])) echo '<div class="invalid-feedback">' . $errors['avatar'] . '</div>'; ?> 
+						<small id="avatarHelpBlock" class="form-text text-muted">
+							Max file size 2.5 MB. 
+						</small>
+					</div>
 					<div class="form-group">
 						<label for="inputName">Kirjeldus</label>
 						<textarea class="form-control <?php if (isset($errors['bio'])) echo "is-invalid"; ?>" name="bio" id="inputBio" rows="3" placeholder="Sisesta oma kirjeldus" required><?php echo $bio; ?></textarea>

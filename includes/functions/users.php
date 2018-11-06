@@ -15,3 +15,14 @@ function updateProfile($id, $bio, $foreground, $background) {
         ':background' => $background
     ]);
 }
+
+function setAvatar($id, $name) {
+    $db = getDb();
+    $stmt = $db->prepare(
+        'INSERT INTO vpavatars (user_id, file) VALUES (:user_id, :file)'
+    );
+    return $stmt->execute([
+        ':user_id' => $id,
+        ':file' => $name
+    ]);
+}
