@@ -3,6 +3,7 @@ const WIDTH = 600;
 const HEIGHT = 400;
 
 require_once('includes/functions.php');
+require_once('includes/functions/photos.php');
 
 if (!$loggedIn) {
 	header('Location: index.php');
@@ -16,10 +17,25 @@ $uploadError = null;
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+	if (isset($_POST['public']) && $_POST['public'] == 1) {
+		$private = 0;
+	} else {
+		$private = 1;
+	}
+
+	if (isset($_POST['title']) && !empty($_POST['title'])) {
+		$title = $_POST['title'];
+	} else {
+		$title = "Nimetu";
+	}
+
+	$fileName = $user['id'] . '-' . microtime(true) * 10000 . '.png';
+
 	if (isset($_FILES["photo"]) && !empty($_FILES["photo"]["name"])) {
-		$target_dir = "uploads/";
+		$targetDir = "uploads/";
 		$imageFileType = strtolower(pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION));
-		$target_file = $target_dir . $user['id'] . '-' . microtime(true) * 10000 . '.png';
+		$target_file = $targetDir . $fileName;
 		$check = getimagesize($_FILES["photo"]["tmp_name"]);
 
 		if($check !== false) {
@@ -43,6 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			if ($image && imagepng($image, $target_file)) {
 				$uploadError = 'The file '. basename($_FILES["photo"]["name"]) . ' has been uploaded.';
 				imagedestroy($image);
+				if (!savePhoto($user['id'], $fileName, $title, $private)) {
+					$uploadError = 'Sorry, there was an error saving your file.';
+					$uploadOk = 0;
+				}
 			} else {
 				$uploadError = 'Sorry, there was an error uploading your file.';
 				$uploadOk = 0;
@@ -73,11 +93,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 						}
 					?>
 					<div class="form-group">
+						<label for="inputTitle">Title</label>
+						<input type="text" class="form-control" id="inputTitle" name="title">
+					</div>
+					<div class="form-group">
 						<label for="photo">Vali foto</label>
 						<input type="file" name="photo" class="form-control-file" id="photo">
 						<small id="photoHelpBlock" class="form-text text-muted">
 							Max file size 2.5 MB. 
 						</small>
+					</div>
+					<div class="form-group">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" name="public" value="1" id="inputPublic">
+							<label class="custom-control-label" for="inputPublic">Public image</label>
+						</div>
 					</div>
 					<button type="submit" class="btn btn-primary">Lae üles</button>
 				</form>
