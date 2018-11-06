@@ -53,6 +53,7 @@
 <body>
 	<div class="wrapper">
 		<nav id="sidebar" class="user-dark">
+			<div id="particles"></div>
 			<div class="sidebar-header">
 				<h4 class="text-center">*CareFully* veebiarendus</h4>
 			</div>

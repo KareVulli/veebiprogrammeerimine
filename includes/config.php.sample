@@ -1,2 +1,4 @@
 <?php
     $config['db'] = '../../config.php';
+    $config['watermark'] = 'assets/images/vp_picfiles/vp_logo_w100_overlay.png';
+    $config['font'] = 'assets/fonts/Minecrafter.Reg.ttf';
