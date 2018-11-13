@@ -4,6 +4,8 @@ const HEIGHT = 400;
 
 require_once('includes/functions.php');
 require_once('includes/functions/photos.php');
+require_once('includes/PhotoManager.php');
+require_once('includes/PhotoValidator.php');
 
 if (!$loggedIn) {
 	header('Location: index.php');
@@ -30,33 +32,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$title = "Nimetu";
 	}
 
-	$fileName = $user['id'] . '-' . microtime(true) * 10000 . '.png';
-
 	if (isset($_FILES["photo"]) && !empty($_FILES["photo"]["name"])) {
 		$targetDir = "uploads/";
-		$imageFileType = strtolower(pathinfo($_FILES["photo"]["name"], PATHINFO_EXTENSION));
+		$fileName = $user['id'] . '-' . microtime(true) * 10000 . '.png';
 		$target_file = $targetDir . $fileName;
-		$check = getimagesize($_FILES["photo"]["tmp_name"]);
 
-		if($check !== false) {
-			$uploadOk = 1;
-		} else {
-			$uploadOk = 0;
-		}
+		$validator = new PhotoValidator();
+		$check = $validator->validate($_FILES["photo"]["tmp_name"]);
 
-		if ($_FILES["photo"]["size"] > 2500000) {
-			$uploadError = "Sorry, your file is too large.";
-			$uploadOk = 0;
-		}
-
-		if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
-			$uploadError = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-			$uploadOk = 0;
-		}
-
-		if ($uploadOk == 1) {
-			$image = resizeImage($_FILES["photo"]["tmp_name"], $imageFileType, WIDTH, HEIGHT);
+		if ($check) {
+			$manager = new PhotoManager(300, 300, $config['watermark'], $config['font']);
+			$image = $manager
+				->setText('Hello ' . $user['firstname'] . ' ' . $user['lastname'])
+				->build($_FILES["photo"]["tmp_name"]);
+					
 			if ($image && imagepng($image, $target_file)) {
+				$uploadOk = 1;
 				$uploadError = 'The file '. basename($_FILES["photo"]["name"]) . ' has been uploaded.';
 				imagedestroy($image);
 				if (!savePhoto($user['id'], $fileName, $title, $private)) {
