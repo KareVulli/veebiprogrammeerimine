@@ -40,7 +40,7 @@
 
         // Check if avatar is uploaded and save it.
         if (isset($_FILES["avatar"]) && !empty($_FILES["avatar"]["name"])) {
-            $targetDir = "uploads/avatars/";
+            $targetDir = $config['avatars_dir'];
             $targetFileName = 'vp_avatar_' . $user['id'] . '-' . microtime(true) * 10000 . '.png';
 
             $validator = new PhotoValidator();

@@ -135,7 +135,7 @@ function getUser($id)
     if (!$row['profile_image']) {
         $row['profile_image'] = $config['default_avatar'];
     } else {
-        $row['profile_image'] = 'uploads/avatars/' . $row['profile_image'];
+        $row['profile_image'] = $config['avatars_dir'] . $row['profile_image'];
     }
     return $row;
 }

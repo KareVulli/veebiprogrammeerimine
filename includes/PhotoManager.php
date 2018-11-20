@@ -36,6 +36,11 @@ class PhotoManager
     private $font;
 
     /**
+     * @var bool
+     */
+    private $printDate = false;
+
+    /**
      * @var string
      */
     private $text;
@@ -57,15 +62,20 @@ class PhotoManager
     {
         $src = $this->createImageFromPath($sourcePath);
 
+        return $this->buildFromImage($src, $sourcePath);
+    }
+
+    public function buildFromImage($src, $sourcePath = null)
+    {
         if ($src) {
-            $width = imagesx($src); // 400
-            $height = imagesy($src); // 200
+            $width = imagesx($src);
+            $height = imagesy($src);
 
             if ($this->crop) {
                 $originalAspect = $width / $height;
                 $thumbAspect = $this->width / $this->height;
 
-                if ( $originalAspect >= $thumbAspect ) // original > thumb
+                if ( $originalAspect >= $thumbAspect )
                 {
                     // If image is wider than thumbnail (in aspect ratio sense)
                     $imageNewHeight = $this->height;
@@ -93,7 +103,10 @@ class PhotoManager
                 $locY = 0;
                 $dest = imagecreatetruecolor($imageNewWidth, $imageNewHeight);
             }
-
+            
+            imagesavealpha($dest, true);
+            $transColor = imagecolorallocatealpha($dest, 0, 0, 0, 127);
+            imagefill($dest, 0, 0, $transColor);
             imagecopyresampled(
                 $dest,
                 $src,
@@ -108,6 +121,9 @@ class PhotoManager
             );
             $this->addWatermark($dest);
             $this->addTextToImage($dest);
+            if ($sourcePath) {
+                $this->addDateToImage($dest, $sourcePath);
+            }
             return $dest;
         }
 
@@ -153,17 +169,40 @@ class PhotoManager
         $imageWidth = imagesx($image);
         $imageHeight = imagesy($image);
 
-        imagettftext(
+        $this->printText(
             $image,
-            $this->textSize,
-            0,
-            ($imageWidth / 2) - ($textWidth / 2),
-            ($imageHeight / 2) - ($textHeight / 2),
-            $white,
             $fontPath,
-            $this->text
+            $this->textSize,
+            $this->text,
+            ($imageWidth / 2) - ($textWidth / 2),
+            ($imageHeight / 2) - ($textHeight / 2)
         );
 
+        return $image;
+    }
+
+    private function addDateToImage($image, $sourcePath, $x = 10, $y = 15)
+    {
+        if (!$this->font || !$this->printDate) {
+            return $image;
+        }
+
+        $white = imagecolorallocatealpha($image, 255, 255, 255, 50);
+
+        $exif = $this->readExif($sourcePath);
+        
+        if (array_key_exists('DateTimeOriginal', $exif)) {
+            $text = $exif['DateTimeOriginal'];
+            $this->printText($image, $this->font, $this->textSize, $text, $x, $y);
+        }
+
+        return $image;
+    }
+
+    private function printText($image, $font, $textSize, $text, $x, $y)
+    {
+        $white = imagecolorallocatealpha($image, 255, 255, 255, 0);
+        imagettftext($image, $textSize, 0, $x, $y, $white, $font, $text);
         return $image;
     }
 
@@ -187,6 +226,12 @@ class PhotoManager
         }
 
         return null;
+    }
+
+    public function readExif($filename)
+    {
+        $exif = @exif_read_data($filename, 'EXIF', false);
+        return ( $exif === false ? [] : $exif );
     }
 
     /**
@@ -377,6 +422,30 @@ class PhotoManager
     public function setTextSize($textSize)
     {
         $this->textSize = $textSize;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of printDate
+     *
+     * @return bool
+     */ 
+    public function getPrintDate()
+    {
+        return $this->printDate;
+    }
+
+    /**
+     * Set the value of printDate
+     *
+     * @param bool $printDate
+     *
+     * @return self
+     */ 
+    public function setPrintDate($printDate)
+    {
+        $this->printDate = $printDate;
 
         return $this;
     }

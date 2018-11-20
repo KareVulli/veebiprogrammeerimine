@@ -1,5 +1,6 @@
 <?php
 	require_once('includes/functions.php');
+	require_once('includes/functions/photos.php');
 	
 	$active = 'home';
 	if ($loggedIn) {
@@ -28,6 +29,18 @@
 				<!-- <img class="img-fluid img-thumbnail" src="../../~rinde/veebiprogrammeerimine2018s/tlu_terra_600x400_1.jpg" alt="Tallinna Ülikooli Terra õppehoone"> -->
 				
 				<p>Mul on ka sõber kes teeb oma <a href="../../~jaanlil/"><strong><u>veebi</u></strong></a>.</p>
+
+				<p>Viimati üleslaetud pilt:</p>
+				<?php
+					$path = $config['images_dir'];
+					$image = getLatestPhoto(!$loggedIn);
+					if (!$image) {
+						echo '<p>Puudub</p>';
+					} else {
+						echo '<img src="' . $path . $image['file'] . '" alt="' . $image['title'] . '" class="img-thumbnail">';
+					}
+				?>
+				
 			</div>
 		</div>
 	</div>

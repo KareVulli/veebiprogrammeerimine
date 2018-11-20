@@ -12,3 +12,54 @@ function savePhoto($userid, $filename, $title, $isPrivate)
         ':private' => $isPrivate,
     ]);
 }
+
+function getPhotos($onlyPublic = false)
+{
+    $db = getDb();
+    if ($onlyPublic) {
+        $private = 'AND private = 0 ';
+    } else {
+        $private = '';
+    }
+    $stmt = $db->query(
+        'SELECT id, file, title, user_id, created, updated_at, private ' .
+        'FROM vpphotos ' .
+        'WHERE deleted_at IS NULL ' . $private .
+        'ORDER BY created DESC'
+    );
+    return $stmt->fetchAll();
+}
+
+function getPrivatePhotos($userid)
+{
+    $db = getDb();
+    $stmt = $db->prepare(
+        'SELECT id, file, title, user_id, created, updated_at, private ' .
+        'FROM vpphotos ' .
+        'WHERE deleted_at IS NULL AND private = 1 AND user_id = :user_id ' .
+        'ORDER BY created DESC'
+    );
+    $stmt->execute([
+        ':user_id' => $userid
+    ]);
+    return $stmt->fetchAll();
+}
+
+
+function getLatestPhoto($onlyPublic = true)
+{
+    $db = getDb();
+    if ($onlyPublic) {
+        $private = 'AND private = 0 ';
+    } else {
+        $private = '';
+    }
+    $stmt = $db->query(
+        'SELECT id, file, title, user_id, created, updated_at, private ' .
+        'FROM vpphotos ' .
+        'WHERE deleted_at IS NULL ' . $private .
+        'ORDER BY created DESC ' .
+        'LIMIT 1'
+    );
+    return $stmt->fetch();
+}

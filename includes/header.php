@@ -69,6 +69,8 @@
 				<li <?php if (isset($active) && $active === 'lesson6') echo 'class="active"'; ?>><a href="lesson6.php">Tund 6 - Sisselogimine</a></li>
 				<li <?php if (isset($active) && $active === 'homework5_users') echo 'class="active"'; ?>><a href="homework5_users.php">Kodutöö 5 - kasutajad</a></li>
 				<li <?php if (isset($active) && $active === 'lesson8') echo 'class="active"'; ?>><a href="lesson8_photoupload.php">Tund 8 - Fotod</a></li>
+				<li <?php if (isset($active) && $active === 'lesson11_photos') echo 'class="active"'; ?>><a href="lesson11_photos.php">Tund 11 - Vaata pilte</a></li>
+				<li <?php if (isset($active) && $active === 'lesson11_privatephotos') echo 'class="active"'; ?>><a href="lesson11_privatephotos.php">Tund 11 - Privaatsed pildid</a></li>
 			</ul>
 		</nav>
 

@@ -33,9 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	if (isset($_FILES["photo"]) && !empty($_FILES["photo"]["name"])) {
-		$targetDir = "uploads/";
-		$fileName = $user['id'] . '-' . microtime(true) * 10000 . '.png';
-		$target_file = $targetDir . $fileName;
+		$fileName = $user['id'] . '-' . microtime(true) * 10000;
+		$extension = '.png';
+		$target_file = $config['images_dir'] . $fileName . $extension;
+		$thumbnail_file = $config['thumbnails_dir'] . $fileName . $extension;
 
 		$validator = new PhotoValidator();
 		$check = $validator->validate($_FILES["photo"]["tmp_name"]);
@@ -44,9 +45,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$manager = new PhotoManager(300, 300, $config['watermark'], $config['font']);
 			$image = $manager
 				->setText('Hello ' . $user['firstname'] . ' ' . $user['lastname'])
+				->setPrintDate(true)
 				->build($_FILES["photo"]["tmp_name"]);
-					
-			if ($image && imagepng($image, $target_file)) {
+
+			$thumbnail = $manager
+				->setWidth(100)
+				->setHeight(100)
+				->setText(null)
+				->setPrintDate(false)
+				->setWatermark(null)
+				->setCrop(true)
+				->buildFromImage($image);
+				
+			//var_dump($manager->readExif($_FILES["photo"]["tmp_name"]));
+			
+			if ($image && imagepng($image, $target_file) && imagepng($thumbnail, $thumbnail_file)) {
 				$uploadOk = 1;
 				$uploadError = 'The file '. basename($_FILES["photo"]["name"]) . ' has been uploaded.';
 				imagedestroy($image);
