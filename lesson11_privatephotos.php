@@ -5,6 +5,20 @@ require_once('includes/functions/photos.php');
 $active = 'lesson11_privatephotos';
 $title = 'Tund11 - Privaatsed pildid';
 
+$perPage = 5;
+$maxPages = ceil(getUserPhotosCount($user['id']) / $perPage);
+
+if (isset($_GET['page']) && $maxPages > 0) {
+    $page = intval($_GET['page']);
+    if ($page < 0) {
+        $page = 0;
+    } elseif ($page >= $maxPages) {
+        $page = $maxPages - 1;
+    }
+} else {
+    $page = 0;
+}
+
 if (!$loggedIn) {
 	header('Location: index.php');
 	die();
@@ -25,7 +39,7 @@ if (!$loggedIn) {
             <div class="d-flex flex-row justify-content-center flex-wrap">
                 <?php
                     $path = $config['thumbnails_dir'];
-                    $images = getPrivatePhotos($user['id']);
+                    $images = getUserPhotos($user['id'], $page, $perPage);
                     if (empty($images)) {
                         echo '<p>Privaatseid pilte pole</p>';
                     } else {
@@ -36,5 +50,6 @@ if (!$loggedIn) {
                 ?>
             </div>
         </div>
+        <?php require('includes/pagination.php'); ?>
     </div>
 <?php require_once('includes/footer.php'); ?>

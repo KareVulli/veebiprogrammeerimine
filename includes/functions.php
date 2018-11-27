@@ -113,7 +113,7 @@ function getUser($id)
 
     $db = getDb();
     $stmt = $db->prepare(
-        'SELECT u.*, a.file AS profile_image FROM vpusers u
+        'SELECT u.*, a.id AS profile_image_id, a.file AS profile_image FROM vpusers u
         LEFT JOIN vpavatars a ON a.user_id = u.id 
         WHERE u.id = :id AND a.id = (
             SELECT MAX(id)
@@ -136,6 +136,7 @@ function getUser($id)
         $row['profile_image'] = $config['default_avatar'];
     } else {
         $row['profile_image'] = $config['avatars_dir'] . $row['profile_image'];
+        $row['profile_image_id'] = $row['profile_image_id'];
     }
     return $row;
 }

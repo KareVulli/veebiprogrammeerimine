@@ -125,6 +125,24 @@
 				</form>
 			</div>
 		</div>
-
+        <div class="row">
+            <div class="center mt-4">
+                <h3>Vanad profiilipildid</h3>
+            </div>
+            <hr>
+            <div class="d-flex flex-row justify-content-center flex-wrap">
+                <?php
+                    $path = $config['avatars_dir'];
+                    $avatars = getOldAvatars($user['id'], (isset($user['profile_image_id']) ? $user['profile_image_id'] : null));
+                    if (empty($avatars)) {
+                        echo '<p>Vanu avatare pole</p>';
+                    } else {
+                        foreach ($avatars as $avatar) {
+                            echo '<div class="p-4"><img src="' . $path . $avatar['file'] . '" alt="Profile picture" class="img-thumbnail"></div>';
+                        }
+                    }
+                ?>
+            </div>
+        </div>
 	</div>
 <?php require_once('includes/footer.php'); ?>

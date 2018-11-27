@@ -26,3 +26,20 @@ function setAvatar($id, $name) {
         ':file' => $name
     ]);
 }
+
+function getOldAvatars($userid, $ignoreID = null) {
+    $db = getDb();
+    if ($ignoreID === null) {
+        $stmt = $db->prepare('SELECT a.file FROM vpavatars a WHERE a.user_id = :user_id ORDER BY id DESC');
+        $stmt->execute([
+            ':user_id' => $id
+        ]);
+    } else {
+        $stmt = $db->prepare('SELECT a.file FROM vpavatars a WHERE a.user_id = :user_id AND id != :id ORDER BY id DESC');
+        $stmt->execute([
+            ':user_id' => $userid,
+            ':id' => $ignoreID
+        ]);
+    }
+    return $stmt->fetchAll();
+}

@@ -14,6 +14,7 @@ if (!$loggedIn) {
 
 $active = 'lesson8_photoupload';
 $title = 'Tund8 - Fotod';
+$javascript = '<script type="text/javascript" src="assets/js/photo_upload.js"></script>';
 $uploadOk = -1;
 $uploadError = null;
 
@@ -102,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					</div>
 					<div class="form-group">
 						<label for="photo">Vali foto</label>
-						<input type="file" name="photo" class="form-control-file" id="photo">
+						<input id="photo" type="file" name="photo" class="form-control-file" id="photo">
 						<small id="photoHelpBlock" class="form-text text-muted">
 							Max file size 2.5 MB. 
 						</small>
@@ -113,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 							<label class="custom-control-label" for="inputPublic">Public image</label>
 						</div>
 					</div>
-					<button type="submit" class="btn btn-primary">Lae üles</button>
+					<button type="submit" id="submit" class="btn btn-primary">Lae üles</button>
 				</form>
 			</div>
 		</div>

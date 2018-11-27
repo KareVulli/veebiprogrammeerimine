@@ -28,10 +28,6 @@
 	<?php
 		if ($loggedIn) {
 			echo '<style>' .
-				'.content { ' .
-					'background-color: ' . $user['background'] . '; ' .
-					'color: ' . $user['foreground'] . '; ' .
-				'}' .
 				'.user-dark { ' .
 					'background-color: ' . darkenColor($user['background'], 1.2) . '!important; ' .
 					'color: ' . $user['foreground'] . '!important; ' .
