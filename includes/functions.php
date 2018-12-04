@@ -210,3 +210,21 @@ function darkenColor($rgb, $darker=2) {
 
     return $hash.$R.$G.$B;
 }
+
+function returnJsonResponse($status = 400, $message = null, $extra = null) {
+    header('Content-type: application/json');
+    http_response_code($status);
+    $data = [];
+    if ($message !== null) {
+        $data['message'] = $message;
+    }
+    if ($extra !== null) {
+        if ($message === null) {
+            $data = $extra;
+        } else {
+            $data = array_merge($data, $extra);
+        }
+    }
+    echo json_encode($data);
+    exit();
+}

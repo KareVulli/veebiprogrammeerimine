@@ -14,6 +14,7 @@ $(function() {
                 $('#error').hide();
             }
             $('#photo').attr("src", data.url);
+            $('#photo').attr("alt", data.title);
         });
     }
 
