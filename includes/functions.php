@@ -6,10 +6,10 @@ const USER_NOT_EXIST = 0;
 const USER_EMAIL_EXISTS = 1;
 const USER_NAME_EXISTS = 2;
 
-require_once('config.php');
+require_once(__DIR__.'/config.php');
 
 // include database credentials
-require_once($config['db']);
+require_once(__DIR__.$config['db']);
 
 $db = null;
 

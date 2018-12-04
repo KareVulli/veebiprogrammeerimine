@@ -9,6 +9,8 @@
 		$title = '*CareFully* veebiarendus';
 	}
 
+	$javascript = '<script type="text/javascript" src="assets/js/photo_shuffler.js"></script>';
+
 ?>
 <?php require_once('includes/header.php'); ?>
 	<div class="container container-main mt-4">
@@ -31,15 +33,8 @@
 				<p>Mul on ka sõber kes teeb oma <a href="../../~jaanlil/"><strong><u>veebi</u></strong></a>.</p>
 
 				<p>Viimati üleslaetud pilt:</p>
-				<?php
-					$path = $config['images_dir'];
-					$image = getLatestPhoto(!$loggedIn);
-					if (!$image) {
-						echo '<p>Puudub</p>';
-					} else {
-						echo '<img src="' . $path . $image['file'] . '" alt="' . $image['title'] . '" class="img-thumbnail">';
-					}
-				?>
+				<img id="photo" src="" style="display: none;" alt="placeholder" class="img-thumbnail">
+				<p id="error" style="display: none;">Pilte pole</p>
 				
 			</div>
 		</div>

@@ -96,7 +96,27 @@ function getUserPhotos($userid, $page = 0, $perPage = 2, $onlyPrivate = true)
 }
 
 
-function getLatestPhoto($onlyPublic = true)
+function getLatestPhoto($onlyPublic = true, $offset = 0)
+{
+    $db = getDb();
+    if ($onlyPublic) {
+        $private = 'AND private = 0 ';
+    } else {
+        $private = '';
+    }
+    $stmt = $db->prepare(
+        'SELECT id, file, title, user_id, created, updated_at, private ' .
+        'FROM vpphotos ' .
+        'WHERE deleted_at IS NULL ' . $private .
+        'ORDER BY created DESC ' .
+        'LIMIT :offset, 1'
+    );
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch();
+}
+
+function getLatestRandomPhoto($onlyPublic = true)
 {
     $db = getDb();
     if ($onlyPublic) {
@@ -109,7 +129,14 @@ function getLatestPhoto($onlyPublic = true)
         'FROM vpphotos ' .
         'WHERE deleted_at IS NULL ' . $private .
         'ORDER BY created DESC ' .
-        'LIMIT 1'
+        'LIMIT 10'
     );
-    return $stmt->fetch();
+    $images = $stmt->fetchAll();
+    
+    if (count($images) > 0) {
+        return $images[rand(0, count($images)-1)];
+    } else {
+        return null;
+    }
+
 }
