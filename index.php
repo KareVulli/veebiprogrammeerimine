@@ -15,7 +15,7 @@
 <?php require_once('includes/header.php'); ?>
 	<div class="container container-main mt-4">
 		<div class="row">
-			<div class="col">
+			<div class="col-sm-8">
 				<div class="center">
 					<h1>Marvin Helstein, IF18</h1>
 				</div>
@@ -31,10 +31,17 @@
 				<!-- <img class="img-fluid img-thumbnail" src="../../~rinde/veebiprogrammeerimine2018s/tlu_terra_600x400_1.jpg" alt="Tallinna Ülikooli Terra õppehoone"> -->
 				
 				<p>Mul on ka sõber kes teeb oma <a href="../../~jaanlil/"><strong><u>veebi</u></strong></a>.</p>
-
+			</div>
+			<div class="col-sm-4">
 				<p>Viimati üleslaetud pilt:</p>
 				<img id="photo" src="" style="display: none;" alt="placeholder" class="img-thumbnail">
 				<p id="error" style="display: none;">Pilte pole</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h3 class="mt-4">Viimased Uudised</h3>
+				<?php require('includes/news.php'); ?>
 				
 			</div>
 		</div>

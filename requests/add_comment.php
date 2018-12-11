@@ -29,7 +29,12 @@ if (isset($_POST["rating"]) && is_numeric($_POST["rating"])) {
 }
 
 if (addComment($photoId, $user['id'], $rating, $comment)) {
-    returnJsonResponse(201, 'Comment added successfully');
+    $photo = getPhoto($photoId);
+    $extra = [];
+    if ($photo) {
+        $extra['rating'] = number_format($photo['rating'], 2);
+    }
+    returnJsonResponse(201, 'Comment added successfully', $extra);
 } else {
     returnJsonResponse(500, 'Failed to post comment');
 }

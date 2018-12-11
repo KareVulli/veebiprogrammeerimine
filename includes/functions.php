@@ -228,3 +228,9 @@ function returnJsonResponse($status = 400, $message = null, $extra = null) {
     echo json_encode($data);
     exit();
 }
+
+function validateDate($date, $format = 'Y-m-d')
+{
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+}

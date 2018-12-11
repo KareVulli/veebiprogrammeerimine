@@ -1,5 +1,8 @@
 $(function() {
-    $('.image-priview').click(function(e) {
+    var currentImage;
+
+    $('.image-preview').click(function(e) {
+        currentImage = $(this);
         var image = $(this).data('url');
         var photo = $(this).data('photo');
         var title = $(this).attr('alt');
@@ -14,7 +17,6 @@ $(function() {
 
     $('#add-comment').click(function(e) {
         e.preventDefault();
-        console.log($('#add-comment').data('photo'));
         var image = $(this).data('photo');
         var rating = $('#rating').val();
         var comment = $('#comment').val();
@@ -25,6 +27,7 @@ $(function() {
             rating: rating
         }, function( data ) {
             $('#status').html(getAlert('success', data.message));
+            updateRating(image, data.rating);
             loadComments(image);
             clearCommentFrom();
         })
@@ -79,5 +82,10 @@ $(function() {
     function clearCommentFrom() {
         $('#rating').val(5)
         $('#comment').val('');
+    }
+
+    function updateRating(image, rating) {
+        console.log("UpdateRating: " + rating);
+        currentImage.parent().find('.rating').text('Hinne: ' + rating);
     }
 });

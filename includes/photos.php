@@ -81,23 +81,22 @@ $javascript = '<script type="text/javascript" src="assets/js/photos.js"></script
                     
 
                     foreach ($images as $image) {
-                        $stars = '';
                         if ($image['rating'] == null) {
-                            $rating = "";
+                            $rating = "<i>Hindamata</i>";
                         } else {
-                            $rating = round($image['rating']);
-                            for ($i = 0; $i < 5; $i++) {
+                            $rating = 'Hinne: ' . number_format($image['rating'], 2);
+                            /* for ($i = 0; $i < 5; $i++) {
                                 if ($i < $rating) {
                                     $stars .= '<i class="fas fa-star"></i>';
                                 } else {
                                     $stars .= '<i class="far fa-star"></i>';
                                 }
-                            }
+                            } */
                         }
 
                         echo '<div class="p-4">'.
-                            '<img class="img-thumbnail image-priview" data-photo="' . $image['id'] . '" data-url="' . $fullPath . $image['file'] . '" src="' . $path . $image['file'] . '" alt="' . $image['title'] . '">'.
-                            '<p class="text-center">' . $stars . '</p>' .
+                            '<img class="img-thumbnail image-preview" data-photo="' . $image['id'] . '" data-url="' . $fullPath . $image['file'] . '" src="' . $path . $image['file'] . '" alt="' . $image['title'] . '">'.
+                            '<p>' . htmlspecialchars($image['firstname'] . ' ' . $image['lastname']) . '<br><span class="rating" >' . $rating . '</span></p>' .
                         '</div>';
                     }
                 }

@@ -61,6 +61,27 @@ function getPhotosCount($onlyPublic = false)
     return $row['photos'];
 }
 
+function getPhoto($id, $onlyPrivate = false)
+{
+    $db = getDb();
+    if ($onlyPrivate) {
+        $private = 'AND p.private = 1 ';
+    } else {
+        $private = '';
+    }
+    $stmt = $db->prepare(
+        'SELECT p.id, p.file, p.title, p.user_id, p.created, p.updated_at, p.private, AVG(r.rating) rating, u.firstname, u.lastname ' .
+        'FROM vpphotos p ' .
+        'LEFT JOIN vpphotos_ratings r ON p.id = r.photo_id ' .
+        'LEFT JOIN vpusers u ON p.user_id = u.id ' .
+        'WHERE p.id = :id AND p.deleted_at IS NULL ' . $private .
+        'GROUP BY p.id '
+    );
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch();
+}
+
 function getPhotos($page = 0, $perPage = 2, $onlyPublic = false)
 {
     $db = getDb();
@@ -71,9 +92,10 @@ function getPhotos($page = 0, $perPage = 2, $onlyPublic = false)
     }
     $offset = $page * $perPage;
     $stmt = $db->prepare(
-        'SELECT p.id, p.file, p.title, p.user_id, p.created, p.updated_at, p.private, AVG(r.rating) rating ' .
+        'SELECT p.id, p.file, p.title, p.user_id, p.created, p.updated_at, p.private, AVG(r.rating) rating, u.firstname, u.lastname ' .
         'FROM vpphotos p ' .
         'LEFT JOIN vpphotos_ratings r ON p.id = r.photo_id ' .
+        'LEFT JOIN vpusers u ON p.user_id = u.id ' .
         'WHERE p.deleted_at IS NULL ' . $private .
         'GROUP BY p.id ' .
         'ORDER BY p.created DESC ' .
